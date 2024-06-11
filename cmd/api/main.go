@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	config "github.com/hovanhoa/go-gin-bluesprint/configs"
+	"github.com/hovanhoa/go-gin-bluesprint/handlers"
 	"log"
-	"net/http"
 )
 
 func main() {
@@ -15,15 +15,8 @@ func main() {
 
 	gin.SetMode(cfg.Mode)
 
-	r := gin.New()
-	r.Use(gin.Logger())
-	r.SetTrustedProxies(nil)
+	e := handlers.Gin(&cfg)
+	handlers.SetDefault(e)
 
-	r.GET("/", getHello)
-
-	_ = r.Run(cfg.ServerAddress)
-}
-
-func getHello(c *gin.Context) {
-	c.String(http.StatusOK, "Hello World!")
+	_ = e.Run(cfg.ServerAddress)
 }
